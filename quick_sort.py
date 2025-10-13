@@ -21,6 +21,7 @@ def quick_sort(arr, calls =0):
     
     if len(arr) <= 1:
         return arr, calls
+    
     pivot = arr[len(arr) // 2]
     left = []
     middle = []
