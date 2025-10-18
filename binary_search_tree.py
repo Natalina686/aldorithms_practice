@@ -85,6 +85,62 @@ class BinarySearchTree:
         while node.right:
             node = node.right
         return node.value
+    
+    def delete(self, value):
+        self.root = self._delete(self.root, value)
+
+    def _delete(self, node, value):
+        if not node:
+            return None
+        if value < node.value:
+            node.left = self._delete(node.left, value)
+        elif value > node.value:
+            node.right = self._delete(node.right, value)
+        else:
+            if not node.left and not node.right:
+                return None
+            if not node.left:
+                return node.right
+            if not node.right:
+                return node.left
+            min_larger_node = node.right
+            while min_larger_node.left:
+                min_larger_node = min_larger_node.left
+            node.value = min_larger_node.value
+            node.right = self._delete(node.right, min_larger_node.value)
+        return node
+    
+    def count_nodes(self):
+        return self._count_nodes(self.root)
+
+    def _count_nodes(self, node):
+        if not node:
+            return 0
+        return 1 + self._count_nodes(node.left) + self._count_nodes(node.right)
+    
+    def height(self):
+        return self._height(self.root)
+
+    def _height(self, node):
+        if not node:
+            return 0
+        left_height = self._height(node.left)
+        right_height = self._height(node.right)
+        return 1 + max(left_height, right_height)
+    
+    def is_bst(self):
+        return self._is_bst(self.root, float('-inf'), float('inf'))
+
+    def _is_bst(self, node, min_val, max_val):
+        if not node:
+            return True
+        if not (min_val < node.value < max_val):
+            return False
+        return (self._is_bst(node.left, min_val, node.value) and
+            self._is_bst(node.right, node.value, max_val))
+
+
+
         
 
     
@@ -99,4 +155,14 @@ print(tree.find_min())
 print(tree.find_max())
 print(tree.find(20))
 print(tree.find(5))
+tree.delete(7)
+print(tree.inorder())
+print("Nodes:", tree.count_nodes())
+print("Height:", tree.height())
+print("Is BST?", tree.is_bst())
+
+tree.delete(5)
+print("Nodes after deletion:", tree.count_nodes())
+print("Height after deletion:", tree.height())
+print("Is BST after deletion?", tree.is_bst()) 
     
