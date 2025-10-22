@@ -71,6 +71,29 @@ class AVLTree:
             return []
         return self.inorder(root.left) + [root.value] + self.inorder(root.right)
     
+    def search(self, root, key):
+        if not root:
+            return None
+        if root.value == key:
+            return root
+        elif key < root.value:
+            return self.search(root.left, key)
+        else:
+            return self.search(root.right, key)
+        
+    def min_value_node(self, node):
+        current = node
+        while current.left:
+            current = current.left
+        return current
+    
+    def max_value_node(self, node):
+        current = node
+        while current.right:
+            current = current.right
+        return current
+
+    
     
 tree = AVLTree()
 root = None
@@ -79,3 +102,9 @@ for v in [10, 20, 30, 40, 50, 25]:
     print(f"Після вставки {v}: {tree.inorder(root)}")
 
 print(f"\nКорінь дерева після балансування: {root.value}")
+
+key = 25
+result = tree.search(root, key)
+print("Знайдено:" if result else "Не знайдено:", key)
+print(tree.min_value_node(root).value)
+print(tree.max_value_node(root).value)
